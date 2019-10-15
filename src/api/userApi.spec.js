@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { getUserById, listPagedUsers } from './userApi';
+import { getUserById, listPagedUsers, saveUser } from './userApi';
 
 describe('User api', () => {
   function fakeApi() {
@@ -105,6 +105,48 @@ describe('User api', () => {
       const { total } = await listPagedUsers(1);
 
       expect(total).toBe(10);
+    });
+  });
+
+  describe('saveUser', () => {
+    test('it creates a new user when the user has no id', async () => {
+      const user = {
+        firstName: 'John',
+        lastName: 'Doe',
+        gender: 'M',
+        isFamily: false,
+        birthDate: new Date(1978, 7, 4),
+      };
+
+      const resource = lisaSimpson();
+
+      fakeApi()
+        .post('/users', JSON.parse(JSON.stringify(user)))
+        .reply(200, resource);
+
+      const newUser = await saveUser(user);
+      expect(newUser).toStrictEqual({ ...resource, birthDate: new Date(resource.birthDate) });
+    });
+
+    test('it updates the user when the user has an id', async () => {
+      const user = {
+        id: 3,
+        firstName: 'John',
+        lastName: 'Doe',
+        gender: 'M',
+        isFamily: false,
+        birthDate: new Date(1978, 7, 4),
+      };
+
+      const resource = lisaSimpson();
+
+      fakeApi()
+        .put('/users/3', JSON.parse(JSON.stringify(user)))
+        .reply(200, resource);
+
+      const newUser = await saveUser(user);
+
+      expect(newUser).toStrictEqual({ ...resource, birthDate: new Date(resource.birthDate) });
     });
   });
 });

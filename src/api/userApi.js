@@ -52,3 +52,18 @@ export async function listPagedUsers(page, limit = 10) {
     total: +headers['x-total-count'],
   };
 }
+
+/**
+ * Stores the user
+ * @param {User} user
+ * @returns {Promise<User>}
+ */
+export async function saveUser(user) {
+  let response;
+
+  if (user.id) {
+    response = await api.put(`${RESOURCE_URI}/${user.id}`, user);
+  } else response = await api.post(RESOURCE_URI, user);
+
+  return map(response.data);
+}
