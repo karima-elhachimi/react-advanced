@@ -29,6 +29,15 @@ export async function getUserById(id) {
   return map(response.data);
 }
 
+/**
+ * List the users, paged.
+ * @param {number} page
+ * @param {number} limit
+ * @returns {Promise<{
+ *  total: number,
+ *  data: User[]
+ * }>}
+ */
 export async function listPagedUsers(page, limit = 10) {
   const { data, headers } = await api.get(RESOURCE_URI, {
     params: {
