@@ -62,7 +62,7 @@ describe('User api', () => {
       };
     }
 
-    test('ensure it limits the result by default on 10', async () => {
+    test('ensure it limits the results by default on 10', async () => {
       fakeApi()
         .get('/users')
         .query({
