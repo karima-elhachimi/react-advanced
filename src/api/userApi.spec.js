@@ -1,19 +1,38 @@
 import nock from 'nock';
-import { getUserById } from './userApi';
+import { getUserById, listPagedUsers } from './userApi';
 
 describe('User api', () => {
+  function fakeApi() {
+    return nock('http://localhost:3000');
+  }
+
+  function bartSimpson() {
+    return {
+      isFamily: true,
+      gender: 'M',
+      lastName: 'Simpson',
+      firstName: 'Bart',
+      id: 1,
+    };
+  }
+
+  function lisaSimpson() {
+    return {
+      isFamily: true,
+      birthDate: '2011-08-13T22:00:00.000Z',
+      gender: 'F',
+      lastName: 'Simpson',
+      firstName: 'Lisa',
+      id: 2,
+    };
+  }
+
   describe('getUserById', () => {
     test('it returns the data', async () => {
-      const resource = {
-        isFamily: true,
-        gender: 'M',
-        lastName: 'Simpson',
-        firstName: 'Bart',
-        id: 1,
-      };
+      const resource = bartSimpson();
 
-      nock('http://localhost:3000')
-        .get('/users/1')
+      fakeApi()
+        .get(`/users/1`)
         .reply(200, resource);
 
       const user = await getUserById(resource.id);
@@ -22,22 +41,70 @@ describe('User api', () => {
     });
 
     test('it maps the birthDate as a date', async () => {
-      const resource = {
-        isFamily: true,
-        birthDate: '2011-08-13T22:00:00.000Z',
-        gender: 'F',
-        lastName: 'Simpson',
-        firstName: 'Lisa',
-        id: 2,
-      };
+      const resource = lisaSimpson();
 
-      nock('http://localhost:3000')
+      fakeApi()
         .get('/users/2')
         .reply(200, resource);
 
       const user = await getUserById(resource.id);
 
       expect(user).toStrictEqual({ ...resource, birthDate: new Date(resource.birthDate) });
+    });
+  });
+
+  describe('listPagedUsers', () => {
+    function buildDefaultQuery() {
+      return {
+        _page: 1,
+        _limit: 10,
+        _sort: 'lastName,firstName',
+      };
+    }
+
+    test('ensure it limits the result by default on 10', async () => {
+      fakeApi()
+        .get('/users')
+        .query({
+          ...buildDefaultQuery(),
+        })
+        .reply(200, []);
+
+      await listPagedUsers(1);
+    });
+
+    test('it returns the data', async () => {
+      const givenPage = 2;
+      const givenLimit = 3;
+
+      const bart = bartSimpson();
+      const lisa = lisaSimpson();
+
+      fakeApi()
+        .get('/users')
+        .query({
+          ...buildDefaultQuery(),
+          _page: givenPage,
+          _limit: givenLimit,
+        })
+        .reply(200, [bart, lisa]);
+
+      const { data } = await listPagedUsers(givenPage, givenLimit);
+
+      expect(data).toStrictEqual([bart, { ...lisa, birthDate: new Date(lisa.birthDate) }]);
+    });
+
+    test('it return the value of X-Total-Count header as total', async () => {
+      fakeApi()
+        .get('/users')
+        .query({
+          ...buildDefaultQuery(),
+        })
+        .reply(200, [], { 'X-Total-Count': '10' });
+
+      const { total } = await listPagedUsers(1);
+
+      expect(total).toBe(10);
     });
   });
 });

@@ -1,5 +1,6 @@
-/* eslint-disable import/prefer-default-export */
-import axios from 'axios';
+import api from './api';
+
+const RESOURCE_URI = '/users';
 
 /**
  * @typedef {Object} User
@@ -24,6 +25,21 @@ function map(resource) {
  * @returns {Promise<User>}
  */
 export async function getUserById(id) {
-  const response = await axios.get(`http://localhost:3000/users/${id}`);
+  const response = await api.get(`${RESOURCE_URI}/${id}`);
   return map(response.data);
+}
+
+export async function listPagedUsers(page, limit = 10) {
+  const { data, headers } = await api.get(RESOURCE_URI, {
+    params: {
+      _page: page,
+      _limit: limit,
+      _sort: 'lastName,firstName',
+    },
+  });
+
+  return {
+    data: data.map(resource => map(resource)),
+    total: +headers['x-total-count'],
+  };
 }
