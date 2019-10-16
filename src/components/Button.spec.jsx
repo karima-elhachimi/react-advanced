@@ -5,10 +5,10 @@ import { render as renderRtl, within, fireEvent } from '@testing-library/react';
 import Button from './Button';
 
 describe('Button', () => {
-  function render({ variant, type, disabled, className, onClick, size, renderFn = renderRtl } = {}) {
+  function render({ variant, type, disabled, className, onClick, size } = {}) {
     const testId = 'my-button-test-id';
 
-    const renderResult = renderFn(
+    const renderResult = renderRtl(
       <Button
         data-testid={testId}
         variant={variant}
@@ -24,14 +24,14 @@ describe('Button', () => {
 
     return {
       ...renderResult,
-      component: () => renderResult.getByTestId(testId),
+      getComponent: renderResult.getByTestId.bind(null, testId),
     };
   }
 
   test('it renders by default as a button', () => {
-    const { component } = render();
+    const { getComponent } = render();
 
-    const button = component();
+    const button = getComponent();
     expect(button).toHaveProperty('tagName', expect.stringMatching(/button/i));
 
     expect(button).toHaveClass('btn', 'btn-primary');
@@ -40,40 +40,45 @@ describe('Button', () => {
   });
 
   test('it renders with a class according to variant', () => {
-    const { component } = render({ variant: 'secondary' });
+    const { getComponent } = render({ variant: 'secondary' });
 
-    const button = component();
+    const button = getComponent();
 
     expect(button).toHaveClass('btn', 'btn-secondary');
   });
 
-  test('it renders with a class according to size', () => {
-    const { component, rerender } = render({ size: 'small' });
+  test('it renders with a class according to size small', () => {
+    const { getComponent } = render({ size: 'small' });
 
-    const button = component();
+    const button = getComponent();
 
     expect(button).toHaveClass('btn', 'btn-sm');
+  });
 
-    render({ size: 'large', renderFn: rerender });
+  test('it renders with a class according to size large', () => {
+    const { getComponent } = render({ size: 'large' });
+
+    const button = getComponent();
+
     expect(button).toHaveClass('btn', 'btn-lg');
   });
 
   test('ensure it renders as the specified button type', () => {
-    const { component } = render({ type: 'submit' });
+    const { getComponent: component } = render({ type: 'submit' });
 
     const button = component();
     expect(button).toHaveAttribute('type', 'submit');
   });
 
   test('ensure it can handle extra classes trough className', () => {
-    const { component } = render({ className: 'custom-class' });
+    const { getComponent: component } = render({ className: 'custom-class' });
 
     const button = component();
     expect(button).toHaveClass('btn', 'btn-primary', 'custom-class');
   });
 
   test('ensure it renders its children', () => {
-    const { component } = render();
+    const { getComponent: component } = render();
 
     const button = component();
 
@@ -81,7 +86,7 @@ describe('Button', () => {
   });
 
   test('ensure it passes disabled', () => {
-    const { component } = render({ disabled: true });
+    const { getComponent: component } = render({ disabled: true });
 
     const button = component();
     expect(button).toHaveProperty('disabled', true);
@@ -90,7 +95,7 @@ describe('Button', () => {
   test('ensure it passes onClick', () => {
     const handleClick = jest.fn();
 
-    const { component } = render({ onClick: handleClick });
+    const { getComponent: component } = render({ onClick: handleClick });
 
     const button = component();
 
