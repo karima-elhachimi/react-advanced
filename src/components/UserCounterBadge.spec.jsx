@@ -3,7 +3,7 @@ import React from 'react';
 import { render, within, waitForDomChange, act } from '@testing-library/react';
 
 import UserCounterBadge from './UserCounterBadge';
-import { listPagedUsers as listPagedUsersMock } from '../api/userApi';
+import { listPagedUsers as listPagedUsersMock, listPagedUsers } from '../api/userApi';
 
 jest.mock('../api/userApi');
 
@@ -39,5 +39,7 @@ describe('User Counter Badge component', () => {
     await waitForDomChange();
 
     expect(badge).toHaveTextContent(10);
+
+    expect(listPagedUsers).toHaveBeenCalledWith(1, 0);
   });
 });
