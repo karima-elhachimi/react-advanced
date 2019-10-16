@@ -1,4 +1,5 @@
 import React from 'react';
+import '@testing-library/jest-dom/extend-expect';
 import { render as renderRtl, within } from '@testing-library/react';
 
 import Badge from './Badge';
