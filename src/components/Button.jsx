@@ -1,7 +1,7 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { oneOf, string } from 'prop-types';
+import { oneOf, string, bool } from 'prop-types';
 import classNames from 'classnames';
 
 const SIZE_MAP = {
@@ -9,7 +9,7 @@ const SIZE_MAP = {
   large: 'lg',
 };
 
-function Button({ className, variant, size, type, ...rest }) {
+function Button({ block, className, variant, size, type, ...rest }) {
   const mappedSize = SIZE_MAP[size];
 
   return (
@@ -19,12 +19,14 @@ function Button({ className, variant, size, type, ...rest }) {
       className={classNames('btn', className, {
         [`btn-${variant}`]: variant,
         [`btn-${mappedSize}`]: mappedSize,
+        'btn-block': block,
       })}
     />
   );
 }
 
 Button.propTypes = {
+  block: bool,
   className: string,
   size: oneOf(['small', 'large']),
   type: oneOf(['button', 'submit', 'reset']),
@@ -32,6 +34,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  block: undefined,
   className: undefined,
   size: undefined,
   type: 'button',

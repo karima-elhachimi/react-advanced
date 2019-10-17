@@ -5,7 +5,7 @@ import { render as renderRtl, within, fireEvent } from '@testing-library/react';
 import Button from './Button';
 
 describe('Button', () => {
-  function render({ variant, type, disabled, className, onClick, size } = {}) {
+  function render({ variant, type, disabled, className, onClick, size, block } = {}) {
     const testId = 'my-button-test-id';
 
     const renderResult = renderRtl(
@@ -17,6 +17,7 @@ describe('Button', () => {
         className={className}
         onClick={onClick}
         size={size}
+        block={block}
       >
         <div data-testid="child" />
       </Button>
@@ -61,6 +62,14 @@ describe('Button', () => {
     const button = getComponent();
 
     expect(button).toHaveClass('btn', 'btn-lg');
+  });
+
+  test('it has a block modifier', () => {
+    const { getComponent } = render({ block: true });
+
+    const button = getComponent();
+
+    expect(button).toHaveClass('btn', 'btn-block');
   });
 
   test('ensure it renders as the specified button type', () => {

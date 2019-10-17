@@ -39,7 +39,7 @@ function LoginForm({ onLogin }) {
       </div>
 
       <div className="form-group">
-        <Button type="submit">Login</Button>
+        <Button type="submit" block>Login</Button>
       </div>
     </form>
   );

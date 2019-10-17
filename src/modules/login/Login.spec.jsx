@@ -36,7 +36,7 @@ describe('Login Module', () => {
 
     const loginButton = getLoginButton();
     expect(loginButton).toHaveAttribute('type', 'submit');
-    expect(loginButton).toHaveClass('btn-primary');
+    expect(loginButton).toHaveClass('btn-primary', 'btn-block');
 
     expect(queryAlert()).not.toBeInTheDocument();
   });
