@@ -28,7 +28,7 @@ function Button({ block, className, variant, size, type, ...rest }) {
 Button.propTypes = {
   block: bool,
   className: string,
-  size: oneOf(['small', 'large']),
+  size: oneOf(Object.keys(SIZE_MAP)),
   type: oneOf(['button', 'submit', 'reset']),
   variant: oneOf(['primary', 'secondary', 'link']),
 };
