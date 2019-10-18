@@ -6,10 +6,28 @@ import NavBar from './NavBar';
 import { renderWithRouter } from '../../test/render-utils';
 
 describe('NavBar component', () => {
-  test('it renders by default', () => {
-    const { getByRole, history } = renderWithRouter(<NavBar />, { route: '/not-home' });
+  function render(route) {
+    const result = renderWithRouter(<NavBar />, { route });
 
-    const navbar = getByRole('navigation');
+    return {
+      ...result,
+      getComponent: result.getByRole.bind(null, 'navigation'),
+    };
+  }
+
+  function toBeALocation({ hash = '', pathname = '/', search = '', state = undefined } = {}) {
+    return expect.objectContaining({
+      hash,
+      pathname,
+      search,
+      state,
+    });
+  }
+
+  test('it renders the nav with a clickable brand logo', () => {
+    const { getComponent, history } = render('/not-home');
+
+    const navbar = getComponent();
     expect(navbar).toHaveClass('navbar');
 
     const { getByAltText, getByText } = within(navbar);
@@ -22,14 +40,18 @@ describe('NavBar component', () => {
 
     fireEvent.click(link);
 
-    expect(history).toHaveProperty(
-      'location',
-      expect.objectContaining({
-        hash: '',
-        pathname: '/',
-        search: '',
-        state: undefined,
-      })
-    );
+    expect(history).toHaveProperty('location', toBeALocation());
+  });
+
+  test('it renders a login link when the user is anonymous', () => {
+    const { getComponent, history } = render('/not-home');
+
+    const { getByText } = within(getComponent());
+
+    const loginLink = getByText(/log in/i);
+
+    fireEvent.click(loginLink);
+
+    expect(history).toHaveProperty('location', toBeALocation({ pathname: '/login' }));
   });
 });
