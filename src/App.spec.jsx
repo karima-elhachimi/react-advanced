@@ -7,21 +7,28 @@ import { App } from './App';
 jest.mock('./modules/home/Home', () => () => <div data-testid="home-module" />);
 jest.mock('./modules/login/Login', () => () => <div data-testid="login-module" />);
 jest.mock('./pages/NotFound', () => () => <div data-testid="page-not-found" />);
+jest.mock('./components/NavBar', () => () => <div data-testid="navbar-mock" />);
 
 describe('App', () => {
+  function render(route) {
+    const renderResult = renderWithRouter(<App />, { route });
+
+    const guardAgainstRenderingPageNotFound = () =>
+      expect(renderResult.queryByTestId('page-not-found')).not.toBeInTheDocument();
+
+    return {
+      ...renderResult,
+      guardAgainstRenderingPageNotFound,
+    };
+  }
+
+  test('it renders by default', () => {
+    const { getByTestId } = render();
+
+    getByTestId('navbar-mock');
+  });
+
   describe('routing', () => {
-    function render(route) {
-      const renderResult = renderWithRouter(<App />, { route });
-
-      const guardAgainstRenderingPageNotFound = () =>
-        expect(renderResult.queryByTestId('page-not-found')).not.toBeInTheDocument();
-
-      return {
-        ...renderResult,
-        guardAgainstRenderingPageNotFound,
-      };
-    }
-
     test('it renders Home by default (/)', () => {
       const { getByTestId, guardAgainstRenderingPageNotFound } = render();
 
