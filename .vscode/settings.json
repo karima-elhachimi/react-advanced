@@ -2,8 +2,4 @@
   // Make sure you don't forget to save when changing focus
   "files.autoSave": "onFocusChange",
   "scssFormatter.tabWidth": 2,
-  "workbench.colorTheme": "Visual Studio Light",
-  "editor.fontWeight": "normal",
-  "window.zoomLevel": 2,
-  "customPresentationMode.backup": {},
 }
