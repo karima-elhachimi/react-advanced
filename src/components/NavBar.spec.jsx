@@ -47,7 +47,7 @@ describe('NavBar component', () => {
     const { getByAltText, getByText } = within(navbar);
 
     const logo = getByAltText(/bootcamp logo/i);
-    expect(logo).toHaveAttribute('src', 'public/images/js-logo.png');
+    expect(logo).toHaveAttribute('src', expect.stringMatching(/public(\/|\/\/)images(\/|\/\/)js-logo.png/));
 
     const link = getByText(/bootcamp/i);
     expect(link).toHaveClass('navbar-brand');
