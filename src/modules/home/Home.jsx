@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import IdentityContext from '../../contexts/IdentityContext';
 
 function Home() {
-  return <h1>Home</h1>;
+  const { current: currentUser } = useContext(IdentityContext);
+
+  return <h1>{currentUser ? `Hello ${currentUser}` : 'Welcome, please log in'}</h1>;
 }
 
 export default Home;
