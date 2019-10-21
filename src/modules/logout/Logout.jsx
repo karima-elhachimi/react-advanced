@@ -3,9 +3,9 @@ import { Redirect } from 'react-router-dom';
 import IdentityContext from '../../contexts/IdentityContext';
 
 function Logout() {
-  const { current, setCurrent } = useContext(IdentityContext);
+  const { setCurrent } = useContext(IdentityContext);
 
-  if (current) setCurrent(undefined);
+  setCurrent(undefined);
 
   return <Redirect to="/" />;
 }
