@@ -1,15 +1,30 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render as renderRtl, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 
 import { validateUser as validateUserMock } from './services/authService';
 import Login from './Login';
+import IdentityContext from '../../contexts/IdentityContext';
+import { renderWithRouter } from '../../../test/render-utils';
 
 jest.mock('./services/authService');
 
 describe('Login Module', () => {
-  function renderComponent() {
-    const result = renderRtl(<Login />);
+  function renderComponent(initialUser) {
+    const identityProviderValue = {
+      current: initialUser,
+    };
+
+    identityProviderValue.setCurrent = user => {
+      identityProviderValue.current = user;
+    };
+
+    const result = renderWithRouter(
+      <IdentityContext.Provider value={identityProviderValue}>
+        <Login />
+      </IdentityContext.Provider>,
+      { route: 'not-home' }
+    );
 
     return {
       ...result,
@@ -18,8 +33,23 @@ describe('Login Module', () => {
       getLoginButton: result.getByText.bind(null, /login/i),
       getAlert: result.getByRole.bind(null, 'alert'),
       queryAlert: result.queryByRole.bind(null, 'alert'),
+      identityProviderValue,
     };
   }
+
+  function toBeALocation({ hash = '', pathname = '/', search = '' } = {}) {
+    return expect.objectContaining({
+      hash,
+      pathname,
+      search,
+    });
+  }
+
+  test('ensure it redirects to home when the user is already authenticated', () => {
+    const { history } = renderComponent('johndoe');
+
+    expect(history).toHaveProperty('location', toBeALocation());
+  });
 
   test('it renders the form as expected', () => {
     const { getByRole, getUsernameInput, getPasswordInput, getLoginButton, queryAlert } = renderComponent();
@@ -74,13 +104,13 @@ describe('Login Module', () => {
       expect(username).toHaveFocus();
     });
 
-    test('it informs the user when successful', () => {
+    test('it sets the current identity when successful and redirects to home', () => {
       const givenUsername = 'john';
       const givenPassword = 'broke';
-      
+
       validateUserMock.mockReturnValue(true);
 
-      const { getUsernameInput, getPasswordInput, getLoginButton, getAlert } = renderComponent();
+      const { getUsernameInput, getPasswordInput, getLoginButton, identityProviderValue, history } = renderComponent();
 
       const username = getUsernameInput();
       const password = getPasswordInput();
@@ -91,12 +121,9 @@ describe('Login Module', () => {
 
       fireEvent.click(loginButton);
 
-      const alert = getAlert();
-      expect(alert).toHaveTextContent(/yippie-kay-ey/i);
-      expect(alert).toHaveClass('text-success');
+      expect(identityProviderValue).toHaveProperty('current', givenUsername);
 
-      // ensure we called our mock
-      expect(validateUserMock).toHaveBeenCalledWith(givenUsername, givenPassword);
+      expect(history).toHaveProperty('location', toBeALocation());
     });
   });
 });
