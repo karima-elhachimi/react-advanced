@@ -8,6 +8,7 @@ import Home from './modules/home/Home';
 import NotFound from './pages/NotFound';
 import NavBar from './components/NavBar';
 import Logout from './modules/logout/Logout';
+import Users from './modules/users/Users';
 
 export function App() {
   const [currentIdentity, setCurrentIdentity] = useState();
@@ -27,6 +28,7 @@ export function App() {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
+          <Route path="/users" component={Users} />
           <Route path="/" exact component={Home} />
           <Route component={NotFound} />
         </Switch>

@@ -75,10 +75,10 @@ describe('NavBar component', () => {
 
     const { getByText } = within(getComponent());
 
-    const loginLink = getByText(/log out/i);
+    const logoutLink = getByText(/log out/i);
     expect(queryByText(/log in/i)).not.toBeInTheDocument();
 
-    fireEvent.click(loginLink);
+    fireEvent.click(logoutLink);
 
     expect(history).toHaveProperty('location', toBeALocation({ pathname: '/logout' }));
   });
