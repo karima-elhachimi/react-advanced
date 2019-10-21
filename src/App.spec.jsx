@@ -20,6 +20,7 @@ function MockHome() {
 
 jest.mock('./modules/home/Home', () => () => <MockHome />);
 jest.mock('./modules/login/Login', () => () => <div data-testid="login-module" />);
+jest.mock('./modules/logout/Logout', () => () => <div data-testid="logout-module" />);
 jest.mock('./pages/NotFound', () => () => <div data-testid="page-not-found" />);
 jest.mock('./components/NavBar', () => jest.fn().mockReturnValue(<div data-testid="navbar-mock" />));
 
@@ -69,6 +70,14 @@ describe('App', () => {
       const { getByTestId, guardAgainstRenderingPageNotFound } = render('/login');
 
       getByTestId('login-module');
+
+      guardAgainstRenderingPageNotFound();
+    });
+
+    test('it renders the logout module on /logout ', () => {
+      const { getByTestId, guardAgainstRenderingPageNotFound } = render('/logout');
+
+      getByTestId('logout-module');
 
       guardAgainstRenderingPageNotFound();
     });

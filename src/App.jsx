@@ -7,6 +7,7 @@ import Login from './modules/login/Login';
 import Home from './modules/home/Home';
 import NotFound from './pages/NotFound';
 import NavBar from './components/NavBar';
+import Logout from './modules/logout/Logout';
 
 export function App() {
   const [currentIdentity, setCurrentIdentity] = useState();
@@ -25,6 +26,7 @@ export function App() {
       <div className="container-fluid main">
         <Switch>
           <Route path="/login" component={Login} />
+          <Route path="/logout" component={Logout} />
           <Route path="/" exact component={Home} />
           <Route component={NotFound} />
         </Switch>
