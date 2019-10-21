@@ -1,13 +1,27 @@
-import React from 'react';
-import { renderWithRouter } from '../test/render-utils';
 import '@testing-library/jest-dom/extend-expect';
+import React, { useContext } from 'react';
+import { fireEvent } from '@testing-library/react';
+import { renderWithRouter } from '../test/render-utils';
 
 import { App } from './App';
 
-jest.mock('./modules/home/Home', () => () => <div data-testid="home-module" />);
+import NavBarMock from './components/NavBar';
+import IdentityContext from './contexts/IdentityContext';
+
+function MockHome() {
+  const { current, setCurrent } = useContext(IdentityContext);
+
+  return (
+    <div data-testid="home-module">
+      <input data-testid="current-user" type="text" value={current || ''} onChange={e => setCurrent(e.target.value)} />
+    </div>
+  );
+}
+
+jest.mock('./modules/home/Home', () => () => <MockHome />);
 jest.mock('./modules/login/Login', () => () => <div data-testid="login-module" />);
 jest.mock('./pages/NotFound', () => () => <div data-testid="page-not-found" />);
-jest.mock('./components/NavBar', () => () => <div data-testid="navbar-mock" />);
+jest.mock('./components/NavBar', () => jest.fn().mockReturnValue(<div data-testid="navbar-mock" />));
 
 describe('App', () => {
   function render(route) {
@@ -26,6 +40,8 @@ describe('App', () => {
     const { getByTestId } = render();
 
     getByTestId('navbar-mock');
+
+    expect(NavBarMock).toHaveBeenCalledWith({}, {});
   });
 
   describe('routing', () => {
@@ -33,8 +49,20 @@ describe('App', () => {
       const { getByTestId, guardAgainstRenderingPageNotFound } = render();
 
       getByTestId('home-module');
-
       guardAgainstRenderingPageNotFound();
+    });
+
+    test('ensure we provide the value of the IdentityContext', () => {
+      const { getByTestId } = render();
+
+      const input = getByTestId('current-user');
+
+      // We did not specify a user by default
+      expect(input).toHaveValue('');
+
+      fireEvent.change(input, { target: { value: 'johnd' } });
+
+      expect(input).toHaveValue('johnd');
     });
 
     test('it renders the login module on /login ', () => {
