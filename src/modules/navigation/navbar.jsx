@@ -4,7 +4,7 @@ import LoggedOnContext from '../login/loggedOnContext';
 import logoPath from '../../public/images/js-logo.png';
 function Navbar() {
   const { loggedInUser } = useContext(LoggedOnContext);
-  console.log({ loggedInUser });
+
   return (
     <nav className="navbar navbar-light bg-light" role="navigation">
       <Link to="/" className="navbar-brand">

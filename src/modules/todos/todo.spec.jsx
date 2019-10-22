@@ -1,6 +1,6 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { renderWithRedux, renderWithRouter } from '../../../test/render-utils';
+import '@testing-library/jest-dom';
+import { renderWithRedux } from '../../../test/render-utils';
 
 import { todoReducer } from '../../reducers/todo.reduce';
 import TodoList from './todolist';
@@ -17,8 +17,8 @@ describe('Ex 2: todos component', () => {
     store: createStore(todoReducer, initialState),
   };
 
-  function renderComponentWithRouter() {
-    const result = renderWithRouter(<TodoList data-testid="todos-list" />);
+  function renderComponent() {
+    const result = renderWithRedux(<TodoList />, { ...stateAndStore });
 
     return {
       ...result,
@@ -26,16 +26,15 @@ describe('Ex 2: todos component', () => {
     };
   }
 
-  function renderComponentWithRedux() {
-    const result = renderWithRedux(<TodoList />, { ...stateAndStore });
-
-    return {
-      ...result,
-    };
-  }
+  test('1: verify header', () => {
+    const { getHeader, debug } = renderComponent();
+    debug();
+    const header = getHeader();
+    expect(header).toHaveTextContent(/Todos/i);
+  });
 
   test('2: verify the items remaining footer', () => {
-    const { debug } = renderComponentWithRedux();
+    const { debug } = renderComponent();
     debug();
   });
   test('3: verify the list of remaining todos, clicking one, or checking one completes the todo', () => {});

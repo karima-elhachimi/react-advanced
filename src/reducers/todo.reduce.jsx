@@ -12,7 +12,6 @@ export function todoReducer(initalState = {}, action) {
     }
     case COMPLETE_TODO: {
       const { payload } = action;
-      console.log({ payload, initalState });
 
       return {
         ...initalState,
