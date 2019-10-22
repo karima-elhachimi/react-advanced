@@ -35,9 +35,11 @@ describe('todo reducer complete functionality ', () => {
   test("verify that our reducer retains other todo's and does not complete them,", () => {
     const state = todoReducer({}, addTodo(todo1));
     const newState = todoReducer(state, addTodo(todo2));
-    expect(newState.length).toStrictEqual(2);
-    expect(newState[1].completed).toStrictEqual(false);
-    expect(newState[2].completed).toStrictEqual(false);
+
+    expect(newState).toStrictEqual({
+      [todo1.id]: todo1,
+      [todo2.id]: todo2,
+    });
   });
   test('verify that our reducer sets the completed flag to true for the given todo,', () => {
     const initState = todoReducer({}, addTodo(todo1));

@@ -5,11 +5,19 @@ function todoReducer(initalState = {}, action) {
   switch (action && action.type) {
     case ADD_TODO: {
       const { payload: newTodo } = action;
-      return { [newTodo.id]: newTodo };
+      return {
+        ...initalState,
+        [newTodo.id]: newTodo,
+      };
     }
     case COMPLETE_TODO: {
       const { payload } = action;
-      return { ...initalState, [payload.id]: { ...payload, complete: true } };
+      console.log({ payload, initalState });
+
+      return {
+        ...initalState,
+        [payload.id]: { ...payload, completed: true },
+      };
     }
     default:
       return initalState;
