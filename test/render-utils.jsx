@@ -5,6 +5,8 @@ import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { render as renderRtl } from '@testing-library/react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 export function renderWithRouter(
   ui,
@@ -24,4 +26,14 @@ export function renderWithRouter(
     // this to test implementation details).
     history,
   };
+}
+
+export function renderWithRedux(ui, { initialState = {}, store = createStore(reducer, initialState) } = {}) {
+  const result = renderRtl(
+    ui, //component dat gerendert dient te worden
+    {
+      wrapper: props => <Provider {...props} store={store} />, //wat er rond de component gewrappet wordt"
+    },
+    store //wat er uiteindelijk wordt gereturned door renderRtl, zodat wij het verder kunnen gebruiken
+  );
 }
