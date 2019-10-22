@@ -1,4 +1,5 @@
 import todoReducer, { addTodo } from './todo.reduce';
+const todotype = require('./todo.type');
 describe('todo reducer ', () => {
   test('verify that our todoReducer has an initialState of {}', () => {
     const initalState = todoReducer();
@@ -13,9 +14,14 @@ describe('todo reducer ', () => {
   });
 
   test('verify that our reducer normalizes the todo under its id', () => {
-    const todo = 'do this or that';
+    /** @type {todotype } */
+    const todo = {
+      id: 1,
+      name: 'i am a name',
+      completed: false,
+    };
     const newState = todoReducer({}, addTodo(todo));
-    const normalisedTodo = newState[1];
+    const normalisedTodo = newState[todo.id];
 
     expect(normalisedTodo).toStrictEqual(todo);
   });

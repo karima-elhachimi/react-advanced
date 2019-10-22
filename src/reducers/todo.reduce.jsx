@@ -2,8 +2,10 @@ const ADD_TODO = 'ADD_TODO';
 
 function todoReducer(initalState = {}, action) {
   switch (action && action.type) {
-    case ADD_TODO:
-      return { 1: action.payload };
+    case ADD_TODO: {
+      const { payload } = action;
+      return { [payload.id]: payload };
+    }
     default:
       return initalState;
   }

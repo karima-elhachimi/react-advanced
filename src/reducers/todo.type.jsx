@@ -4,3 +4,5 @@
  * @property {string} name
  * @property {bool} [completed]
  */
+
+exports.unused = {};
