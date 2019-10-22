@@ -1,10 +1,15 @@
 const ADD_TODO = 'ADD_TODO';
+const COMPLETE_TODO = 'COMPLETE_TODO';
 
 function todoReducer(initalState = {}, action) {
   switch (action && action.type) {
     case ADD_TODO: {
+      const { payload: newTodo } = action;
+      return { [newTodo.id]: newTodo };
+    }
+    case COMPLETE_TODO: {
       const { payload } = action;
-      return { [payload.id]: payload };
+      return { ...initalState, [payload.id]: { ...payload, complete: true } };
     }
     default:
       return initalState;
@@ -14,6 +19,13 @@ function todoReducer(initalState = {}, action) {
 export function addTodo(todo) {
   return {
     type: ADD_TODO,
+    payload: todo,
+  };
+}
+
+export function completeTodo(todo) {
+  return {
+    type: COMPLETE_TODO,
     payload: todo,
   };
 }
