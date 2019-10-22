@@ -1,4 +1,4 @@
-import todoReducer, { addTodo, completeTodo } from './todo.reduce';
+import { todoReducer, addTodo, completeTodo } from './todo.reduce';
 const todotype = require('./todo.type');
 
 /** @type {todotype } */

@@ -40,4 +40,10 @@ describe('Navigation Module', () => {
     const link = container.querySelector('span');
     expect(link).toHaveTextContent(/log-in|log-out/);
   });
+  test(' todo link is in navbar', () => {
+    const { getByText } = renderComponent();
+    const todoLink = getByText('todos');
+    fireEvent.click(todoLink);
+    expect(history.location.pathname).toBe('/todos');
+  });
 });

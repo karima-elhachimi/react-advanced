@@ -1,7 +1,7 @@
 const ADD_TODO = 'ADD_TODO';
 const COMPLETE_TODO = 'COMPLETE_TODO';
 
-function todoReducer(initalState = {}, action) {
+export function todoReducer(initalState = {}, action) {
   switch (action && action.type) {
     case ADD_TODO: {
       const { payload: newTodo } = action;
@@ -37,5 +37,3 @@ export function completeTodo(todo) {
     payload: todo,
   };
 }
-
-export default todoReducer;

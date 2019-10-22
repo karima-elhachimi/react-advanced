@@ -2,13 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function TodoList() {
-  return (
-    <div>
-      <Link to="/todos" role="todo-header">
-        Todos
-      </Link>
-    </div>
-  );
+  return <div role="todo-header"></div>;
 }
 
 export default TodoList;
