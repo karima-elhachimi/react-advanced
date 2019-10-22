@@ -1,7 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { renderWithRedux, renderWithRouter } from '../../../test/render-utils';
-import { fireEvent } from '@testing-library/dom';
 
 import { todoReducer } from '../../reducers/todo.reduce';
 import TodoList from './todolist';

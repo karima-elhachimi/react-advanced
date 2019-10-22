@@ -7,10 +7,13 @@ function Navbar() {
   console.log({ loggedInUser });
   return (
     <nav className="navbar navbar-light bg-light" role="navigation">
-      <a className="navbar-brand" href="/">
+      <Link to="/" className="navbar-brand">
         <img src={logoPath} width="30" height="30" className="d-inline-block align-top" alt="Bootcamp Logo" />
         Bootcamp
-      </a>
+      </Link>
+      <Link to="/todos" className="navbar-brand">
+        todos
+      </Link>
 
       {loggedInUser ? (
         <Link to="/logout">

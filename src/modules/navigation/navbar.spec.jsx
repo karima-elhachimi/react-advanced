@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { renderWithRouter as renderRtl } from '../../../test/render-utils';
+import { fireEvent } from '@testing-library/dom';
 
 import Navbar from './navbar.jsx';
 import LoggedOnContext from '../login/loggedOnContext';
@@ -41,7 +42,7 @@ describe('Navigation Module', () => {
     expect(link).toHaveTextContent(/log-in|log-out/);
   });
   test(' todo link is in navbar', () => {
-    const { getByText } = renderComponent();
+    const { getByText, history } = renderComponent();
     const todoLink = getByText('todos');
     fireEvent.click(todoLink);
     expect(history.location.pathname).toBe('/todos');
