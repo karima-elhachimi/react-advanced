@@ -33,7 +33,11 @@ export function renderWithRedux(ui, { initialState = {}, store = createStore(red
     ui, //component dat gerendert dient te worden
     {
       wrapper: props => <Provider {...props} store={store} />, //wat er rond de component gewrappet wordt"
-    },
-    store //wat er uiteindelijk wordt gereturned door renderRtl, zodat wij het verder kunnen gebruiken
+    }
   );
+
+  return {
+    ...result, //alle functions uit render van r testing library wordt mee gespread als return
+    store, //wat er uiteindelijk wordt gereturned door renderRtl, zodat wij het verder kunnen gebruiken
+  };
 }

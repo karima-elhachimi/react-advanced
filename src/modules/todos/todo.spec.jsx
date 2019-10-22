@@ -1,12 +1,19 @@
-import {render} from '@testing-library/jest-dom';
+import { renderWithRedux } from '../../../test/render-utils';
+import { fireEvent } from '@testing-library/dom';
+
 describe('Ex 2: todos component', () => {
-  function renderComponent(){
+  function renderComponent() {
+    const result = renderWithRouter(<TodoList />);
     return {
-      component: 
-    }
+      ...result,
+      getHeader: result.getByRole.bind(null, 'todo-header'),
+    };
   }
   test('1: todo link is in header', () => {
-
+    const { history, getHeader } = renderComponent();
+    const header = getHeader();
+    fireEvent.click(header);
+    expect(history.location.pathname).toBe('/todos');
   });
   test('2: verify the items remaining footer', () => {});
   test('3: verify the list of remaining todos, clicking one, or checking one completes the todo', () => {});

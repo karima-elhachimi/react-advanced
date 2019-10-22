@@ -30,6 +30,7 @@ export function App() {
           <Route path="/logout" component={Logout} />
           <Route path="/users" component={Users} />
           <Route path="/" exact component={Home} />
+
           <Route component={NotFound} />
         </Switch>
       </div>

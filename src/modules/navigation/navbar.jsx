@@ -11,9 +11,7 @@ function Navbar() {
         <img src={logoPath} width="30" height="30" className="d-inline-block align-top" alt="Bootcamp Logo" />
         Bootcamp
       </a>
-      <Link to="/todos">
-        <span>Todo's</span>
-      </Link>
+
       {loggedInUser ? (
         <Link to="/logout">
           <span>log-out</span>
