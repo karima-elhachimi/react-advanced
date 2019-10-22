@@ -1,5 +1,7 @@
-import { renderWithRedux } from '../../../test/render-utils';
+import React from 'react';
+import { renderWithRedux, renderWithRouter } from '../../../test/render-utils';
 import { fireEvent } from '@testing-library/dom';
+import TodoList from './todolist';
 
 describe('Ex 2: todos component', () => {
   function renderComponent() {
