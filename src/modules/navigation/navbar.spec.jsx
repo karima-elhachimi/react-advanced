@@ -43,8 +43,14 @@ describe('Navigation Module', () => {
 
   test(' todo link is in navbar', () => {
     const { getByText, history } = renderComponent();
-    const todoLink = getByText('todos');
+    const todoLink = getByText('todos'); //test op classname van active
     fireEvent.click(todoLink);
-    expect(history.location.pathname).toBe('/todos');
+    //expect(history.location.pathname).toBe('/to/forosdos'); zo weinig mogelijk
+    expect(history).toHaveProperty(
+      'location',
+      expect.objectContaining({
+        pathname: '/todos',
+      })
+    );
   });
 });

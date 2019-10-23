@@ -98,5 +98,9 @@ describe('App', () => {
 
       expect(queryByTestId('home-module')).not.toBeInTheDocument();
     });
+
+    test('route to todos exists', () => {
+      //todo
+    });
   });
 });

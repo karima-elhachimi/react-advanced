@@ -1,17 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { addTodo } from '../../reducers/todo.reduce';
 
-function TodoList({ todos }) {
+function TodoList() {
+  const remainingTodos = useSelector(state => Object.values(state.todos).filter(todo => !todo.complete));
+  const handleChange = e => {
+    if (e.target.value) {
+      const todo = {
+        id: Date.now(),
+        name: e.target.value,
+        completed: false,
+      };
+    }
+  };
   return (
     <div className="container">
       <div role="todo-header">Todos</div>
-      <form>
+      <form onSubmit={() => {}}>
         <label htmlFor="todo-input">Add new todo:</label>
-        <input name="todo-input" placeholder="enter new todo" role="todo-input" />
+        <input name="todo-input" placeholder="enter new todo" role="todo-input" onChange={e => handleChange(e)} />
       </form>
-      <div role="todo-footer">{todos.length} remaining todos.</div>
+      <ul>
+        {remainingTodos.map(todo => (
+          <li key={`todo-${todo.id}`} role="todo-item">
+            <input type="checkbox" onChange={() => {}} /> <span>{todo.name}</span>
+          </li>
+        ))}
+      </ul>
+      <div role="todo-footer">{remainingTodos.length} remaining todos.</div>
     </div>
   );
 }
@@ -27,7 +44,4 @@ export const mapDispatchToProps = dispatch => ({
   complete: todo => dispatch(completeTodo(todo)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList);
+export default TodoList;

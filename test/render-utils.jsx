@@ -7,7 +7,7 @@ import { Router } from 'react-router-dom';
 import { render as renderRtl } from '@testing-library/react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { todoReducer } from '../src/reducers/todo.reduce';
+import { rootReduced } from '../src/store/store';
 
 export function renderWithRouter(
   ui,
@@ -29,7 +29,7 @@ export function renderWithRouter(
   };
 }
 
-export function renderWithRedux(ui, { initialState = {}, store = createStore(todoReducer, initialState) } = {}) {
+export function renderWithRedux(ui, { initialState = {}, store = createStore(rootReduced, initialState) } = {}) {
   const result = renderRtl(
     ui, //component dat gerendert dient te worden
     {
