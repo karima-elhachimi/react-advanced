@@ -4,7 +4,6 @@ import { renderWithRouter as renderRtl } from '../../../test/render-utils';
 import { fireEvent } from '@testing-library/dom';
 
 import Navbar from './navbar.jsx';
-import LoggedOnContext from '../login/loggedOnContext';
 
 describe('Navigation Module', () => {
   function renderComponent() {
@@ -20,7 +19,7 @@ describe('Navigation Module', () => {
 
     const nav = getByRole('navigation');
 
-    expect(nav).toBeInTheDocument;
+    expect(nav).toBeInTheDocument();
   });
 
   test('verify brand logo image trough alt text', () => {
@@ -41,6 +40,7 @@ describe('Navigation Module', () => {
     const link = container.querySelector('span');
     expect(link).toHaveTextContent(/log-in|log-out/);
   });
+
   test(' todo link is in navbar', () => {
     const { getByText, history } = renderComponent();
     const todoLink = getByText('todos');

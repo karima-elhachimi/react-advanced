@@ -2,19 +2,23 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { renderWithRedux } from '../../../test/render-utils';
 
-import { todoReducer } from '../../reducers/todo.reduce';
 import TodoList from './todolist';
 import { createStore } from 'redux';
 
+import { rootReduced } from '../../store/store';
+import { fireEvent } from '@testing-library/dom';
+
 describe('Ex 2: todos component', () => {
-  const todos = [{ id: 1, name: 'this is a name' }, { id: 2, name: 'this is a name 2' }];
+  const mockTodos = [{ id: 1, name: 'conquer world' }, { id: 2, name: 'world dominion' }];
   const initialState = {
-    [todos[0].id]: todos[0],
-    [todos[1].id]: todos[1],
+    todos: {
+      [mockTodos[0].id]: mockTodos[0],
+      [mockTodos[1].id]: mockTodos[1],
+    },
   };
   const stateAndStore = {
     initialState,
-    store: createStore(todoReducer, initialState),
+    store: createStore(rootReduced, initialState),
   };
 
   function renderComponent() {
@@ -23,6 +27,8 @@ describe('Ex 2: todos component', () => {
     return {
       ...result,
       getHeader: result.getByRole.bind(null, 'todo-header'),
+      getFooter: result.getByRole.bind(null, 'todo-footer'),
+      getInput: result.getByRole.bind(null, 'todo-input'),
     };
   }
 
@@ -33,10 +39,27 @@ describe('Ex 2: todos component', () => {
     expect(header).toHaveTextContent(/Todos/i);
   });
 
-  test('2: verify the items remaining footer', () => {
-    const { debug } = renderComponent();
-    debug();
+  test('2: verify footer', () => {
+    const { getFooter } = renderComponent();
+    const footer = getFooter();
+
+    expect(footer).toBeInTheDocument();
   });
-  test('3: verify the list of remaining todos, clicking one, or checking one completes the todo', () => {});
-  test('4: verify the user can add a new todo by entering the name in the input', () => {});
+  test('3: todo count is in footer', () => {
+    const { getFooter, store } = renderComponent();
+    const footer = getFooter();
+    expect(footer).toHaveTextContent(/2 remaining todos./i);
+  });
+  test('4: input works', () => {
+    const { getInput, store } = renderComponent();
+    const newTodo = 'this is a test todo';
+    expect(getInput.value).toBe('');
+    fireEvent.change(getInput, { target: { value: newTodo } });
+    fireEvent.keyPress('enter');
+    expect(getInput.value).toBe(newTodo);
+  });
+  test('5: clicking one, or checking one completes the todo', () => {});
+  test('6: remaining todo changes with adding or completing a todo', () => {});
+  test('7: verify the user can add a new todo by entering the name in the input', () => {});
+  test('8: adds a new todo by entering its title in the input', () => {});
 });

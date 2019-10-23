@@ -1,3 +1,6 @@
+import { connect } from 'react-redux';
+import TodoList from '../modules/todos/todolist';
+
 const ADD_TODO = 'ADD_TODO';
 const COMPLETE_TODO = 'COMPLETE_TODO';
 
